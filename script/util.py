@@ -371,3 +371,34 @@ def ligand_substructure_search(mol_ligand, catalyst_mol):
     # display(img)
     
     return has_substructure, substruct_matches_catalyst, dentate_in_ligand_idxs, match_metal_nbrs_idxs
+
+def ligand_dentate_search(mol_ligand, catalyst_mol):
+    has_substructure = False
+    
+    if catalyst_mol.HasSubstructMatch(mol_ligand):
+        has_substructure = True
+    else:
+        raise ValueError("No substructure match observed")
+
+    substruct_matches = list(catalyst_mol.GetSubstructMatches(mol_ligand, maxMatches=10))
+
+    for at in catalyst_mol.GetAtoms():
+        if rdmetallics.is_transition_metal(at):
+            metal_idx = at.GetIdx()
+            metal_nbrs = [nbr.GetIdx() for nbr in at.GetNeighbors()]
+
+    # TODO what to do if no metal found
+    dent_probs = []
+    for match in substruct_matches:
+        temp_dent_probs = []
+        for x in match:
+            if x in metal_nbrs:
+                y = 1
+            else:
+                y = 0
+            temp_dent_probs.append(y)
+        dent_probs.append(temp_dent_probs)
+    if len(dent_probs) == 1:
+        return dent_probs[0]
+    else:
+        return [sum(values) / len(values) for values in zip(*dent_probs)]

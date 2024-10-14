@@ -26,6 +26,7 @@ from IPython.display import display
 
 
 from util import *
+from global_params import original_tmQM_dataset_path, raw_CSD_dataset_path, sdf_tmQM_dataset_path
 
 
 print(rdkit.__version__)
@@ -36,30 +37,12 @@ RDLogger.DisableLog('rdApp.*')
 IPythonConsole.ipython_3d = False
 
 
-
-
-#########################################################
-#########################################################
-#########################################################
-
-
-
-#########################################################
-#########################################################
-#########################################################
-
-
-
-
-
-
 ###################################################################################
 ###################################################################################
 ###################################################################################
 
 
-dir_path = '/home/galymzhan/tmQM_galym/tmQM'
-tmQM_mols = load_tmQM_dataset(dir_path)
+tmQM_mols = load_tmQM_dataset(original_tmQM_dataset_path)
 print('Loaded the initial dataset.')
 
 tmQM_properties = {}
@@ -78,9 +61,7 @@ print('Recorded all properties from tmQM mols.')
 ###################################################################################
 # Below code reads original CSD derived SDF files (conncetivity info encluded), loads properties and cross checks MND & stoichiometry
 
-CSD_files_path = '/home/galymzhan/Documents/ccdc_structures_sdf'
-
-filenames = os.listdir(CSD_files_path)
+filenames = os.listdir(raw_CSD_dataset_path)
 print(len(filenames))
 
 # work in batches and save entire dataset into three SDF files
@@ -108,7 +89,7 @@ for i, sampled_files in enumerate(three_cuts):
     for sdf in tqdm(sampled_files):
         CSD_code = sdf[:-4]
         try:
-            suppl = Chem.SDMolSupplier(os.path.join(CSD_files_path,f'{sdf}'), sanitize=False, removeHs=False)
+            suppl = Chem.SDMolSupplier(os.path.join(raw_CSD_dataset_path,f'{sdf}'), sanitize=False, removeHs=False)
             for mol in suppl:
                 if mol is not None:
                     MND, true_stoichiometry = tmQM_properties[CSD_code]['MND'], tmQM_properties[CSD_code]['Stoichiometry']
@@ -149,7 +130,7 @@ for i, sampled_files in enumerate(three_cuts):
             failed_error_entries.append(CSD_code)
             pass
 
-    sdf_writer = Chem.SDWriter(f"/home/galymzhan/tmQM_galym/sdf_tmQM/tmQM_nonOpt_{i+1}.sdf")
+    sdf_writer = Chem.SDWriter(os.path.join(sdf_tmQM_dataset_path, "tmQM_nonOpt_{i+1}.sdf"))
     sdf_writer.SetKekulize(False)
 
     # Write each molecule to the file
@@ -173,8 +154,6 @@ print(f'successful entries: {len(succesful_mols)}')
 total_check = len(failed_error_entries) + len(none_mols) + len(failed_upon_check) + len(succesful_mols)
 print(f'Do these numbers add-up to initial number?')
 print(total_check == total)
-
-
 
 ###################################################################################
 ###################################################################################
