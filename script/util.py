@@ -24,7 +24,11 @@ import rdmetallics
 from IPython.display import display
 
 
+<<<<<<< HEAD
 # print(rdkit.__version__)
+=======
+print(rdkit.__version__)
+>>>>>>> 3dc62a990f2991cd2ffa05beef6401a878520e7d
 IPythonConsole.drawOptions.addAtomIndices = False
 IPythonConsole.molSize = 300,300
 RDLogger.DisableLog('rdApp.*')
@@ -370,6 +374,7 @@ def ligand_substructure_search(mol_ligand, catalyst_mol):
     # img = Draw.MolsToGridImage(mols, molsPerRow=5, highlightAtomLists=highlights)
     # display(img)
     
+<<<<<<< HEAD
     return has_substructure, substruct_matches_catalyst, dentate_in_ligand_idxs, match_metal_nbrs_idxs
 
 def ligand_dentate_search(mol_ligand, catalyst_mol):
@@ -402,3 +407,6 @@ def ligand_dentate_search(mol_ligand, catalyst_mol):
         return dent_probs[0]
     else:
         return [sum(values) / len(values) for values in zip(*dent_probs)]
+=======
+    return has_substructure, substruct_matches_catalyst, dentate_in_ligand_idxs, match_metal_nbrs_idxs
+>>>>>>> 3dc62a990f2991cd2ffa05beef6401a878520e7d

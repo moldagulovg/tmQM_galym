@@ -6,15 +6,24 @@ from rdkit.Chem import rdDetermineBonds
 from rdkit.Chem import rdMolDescriptors
 from rdkit import RDLogger
 
+from rdkit.Chem import rdMolDescriptors
+from rdkit import RDLogger
+
 from IPython.display import display
 from PIL import ImageDraw, ImageFont
+
 
 
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
 
+from tqdm import tqdm
+
 import py3Dmol
+from collections import defaultdict
+import re
+from random import sample
 from collections import defaultdict
 import re
 from random import sample
@@ -44,6 +53,16 @@ IPythonConsole.ipython_3d = False
 
 tmQM_mols = load_tmQM_dataset(original_tmQM_dataset_path)
 print('Loaded the initial dataset.')
+
+tmQM_properties = {}
+for mol in tmQM_mols:
+    CSD_code = mol.GetProp('CSD_code')
+    prop = unload_properties(mol)
+    tmQM_properties[CSD_code] = prop
+keys_vals = [(a, b) for a,b in tmQM_properties.items()]
+print('Recorded all properties from tmQM mols.')
+# print(keys_vals[0])
+# print(len(keys_vals))
 
 tmQM_properties = {}
 for mol in tmQM_mols:
