@@ -115,10 +115,18 @@ print()
 print()
 
 # TODO save 'unique_ligands' dictionary as CSV file
-u_lig_df = pd.DataFrame(unique_ligands)
-file_path = os.path.join(extracted_ligands_path, 'unique_ligands_n_complexes.csv')
-u_lig_df.to_csv(file_path)
-print(f'saved unique ligands and all their complexes to {file_path}')
+# # Check the lengths of the lists
+# max_len = max(len(v) for v in unique_ligands.values())
+
+# # Adjust lists to have the same length (filling with None or any other value)
+# for key, value in unique_ligands.items():
+#     if len(value) < max_len:
+#         unique_ligands[key] = value + [None] * (max_len - len(value))
+
+# u_lig_df = pd.DataFrame(unique_ligands)
+# file_path = os.path.join(extracted_ligands_path, 'unique_ligands_n_complexes.csv')
+# u_lig_df.to_csv(file_path, index=False)
+# print(f'saved unique ligands and all their complexes to {file_path}')
 
 ###################################################################################
 ###################################################################################
